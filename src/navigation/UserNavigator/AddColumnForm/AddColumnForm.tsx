@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import {useDispatch} from 'react-redux';
-import {sagaActions} from '../../../store/ducks/columnsList/types';
+import {columnsSagaActions} from '../../../store/ducks/columnsList/types';
 import {ProfileScreenNavigationProp} from '../Navigator';
 import {route} from '../routes';
 import PrimaryButton from '../../../UI/Button';
@@ -45,7 +45,7 @@ const AddColumnForm = ({navigation}: Props) => {
     prayerId: number;
   }) => {
     dispatch({
-      type: sagaActions.SET_COLUMN_SAGA,
+      type: columnsSagaActions.SET_COLUMN_SAGA,
       title,
       description,
       prayerId,

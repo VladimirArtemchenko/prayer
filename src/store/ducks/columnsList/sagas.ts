@@ -1,13 +1,13 @@
 import {call, put, takeEvery} from 'redux-saga/effects';
 import {enPoint} from '../../../constatns';
-import {sagaActions} from './types';
+import {columnsSagaActions} from './types';
 import {makeRequest} from '../../../api/makeRequest';
 import {ColumnListType, getColumnsList} from './reducer';
 import {SagaIterator} from 'redux-saga';
 import {PrayersListType} from '../prayerList/reducer';
 
 export function* fetchColumnsListSagaWatcher() {
-  yield takeEvery(sagaActions.FETCH_COLUMNS_SAGA, fetchColumnsListSaga);
+  yield takeEvery(columnsSagaActions.FETCH_COLUMNS_SAGA, fetchColumnsListSaga);
 }
 
 export function* fetchColumnsListSaga(): SagaIterator {
@@ -20,7 +20,7 @@ export function* fetchColumnsListSaga(): SagaIterator {
 }
 
 export function* addColumnSagaWatcher() {
-  yield takeEvery(sagaActions.SET_COLUMN_SAGA, addColumnSaga);
+  yield takeEvery(columnsSagaActions.SET_COLUMN_SAGA, addColumnSaga);
 }
 
 export function* addColumnSaga({
@@ -45,7 +45,7 @@ export function* addColumnSaga({
 }
 
 export function* deletingColumnSagaWatcher() {
-  yield takeEvery(sagaActions.DELETE_COLUMN_SAGA, deletingColumnSaga);
+  yield takeEvery(columnsSagaActions.DELETE_COLUMN_SAGA, deletingColumnSaga);
 }
 
 export function* deletingColumnSaga({
@@ -64,7 +64,7 @@ export function* deletingColumnSaga({
   }
 }
 export function* changeColumnSagaWatcher() {
-  yield takeEvery(sagaActions.CHANGE_COLUMN_SAGA, changeColumnsSaga);
+  yield takeEvery(columnsSagaActions.CHANGE_COLUMN_SAGA, changeColumnsSaga);
 }
 
 export function* changeColumnsSaga({

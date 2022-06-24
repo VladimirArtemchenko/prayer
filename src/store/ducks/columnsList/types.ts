@@ -1,4 +1,4 @@
-export enum sagaActions {
+export enum columnsSagaActions {
   FETCH_COLUMNS_SAGA = 'FETCH_COLUMNS_SAGA',
   SET_COLUMN_SAGA = 'SET_COLUMN_SAGA',
   DELETE_COLUMN_SAGA = 'DELETE_COLUMN_SAGA',

@@ -21,6 +21,8 @@ import {
 } from './prayerList/sagas';
 import {
   addCommentsSagaWatcher,
+  changeCommentsSagaWatcher,
+  deleteCommentsSagaWatcher,
   fetchCommentsSagaWatcher,
 } from './comments/sagas';
 
@@ -46,5 +48,7 @@ export function* rootSagas() {
     changePrayerSagaWatcher(),
     fetchCommentsSagaWatcher(),
     addCommentsSagaWatcher(),
+    deleteCommentsSagaWatcher(),
+    changeCommentsSagaWatcher(),
   ]);
 }

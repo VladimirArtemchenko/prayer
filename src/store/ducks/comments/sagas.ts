@@ -27,9 +27,7 @@ export function* addCommentsSaga(data: string): SagaIterator {
     const response = yield call(() =>
       makeRequest.post(enPoint.COMMENTS_URL, data),
     );
-    console.log(response);
     const comments = yield call(() => makeRequest.get(enPoint.COMMENTS_URL));
-    console.log(comments);
     yield put(comments.data);
   } catch (error) {
     console.log('error: ', error);
@@ -68,7 +66,7 @@ export function* fetchChangeComment({
   const data = {commentId, body};
   try {
     const response = yield call(() =>
-      makeRequest.put(`${COMMENTS_URL}/${commentId}`, data),
+      makeRequest.put(`${enPoint.COMMENTS_URL}/${commentId}`, data),
     );
     console.log(response);
     const comments = yield call(() => makeRequest.get(enPoint.COMMENTS_URL));

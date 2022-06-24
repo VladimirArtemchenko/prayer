@@ -20,7 +20,8 @@ import Prayer from '../../../UI/Prayer/Prayer';
 import SvgSettings from '../../../assets/icons/Settings';
 import {makeRequest} from '../../../api/makeRequest';
 import {getUserInfo} from '../../../store/ducks/user/reducer';
-import {sagaActions} from '../../../store/ducks/columnsList/types';
+import {columnsSagaActions} from '../../../store/ducks/columnsList/types';
+import {sagaActions} from '../../../store/ducks/prayerList/types';
 import {RowMap, SwipeListView} from 'react-native-swipe-list-view';
 import PrimaryButton from '../../../UI/Button';
 import {PrayersListType} from '../../../store/ducks/prayerList/reducer';
@@ -57,7 +58,7 @@ const BoardScreen: React.FC<BoardScreenProps> = ({navigation}) => {
     };
     console.log(body);
     dispatch({
-      type: sagaActions.CHANGE_COLUMN_SAGA,
+      type: columnsSagaActions.CHANGE_COLUMN_SAGA,
       data: body,
       columnId: currentBoard.id,
     });

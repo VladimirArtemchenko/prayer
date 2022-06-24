@@ -7,17 +7,16 @@ export interface CommentType {
   prayerId: number;
   userId: number;
 }
-const comments: CommentType[] = [];
+const comments: CommentType[] = [
+  {id: 0, body: 'string', created: 'string', prayerId: 0, userId: 0},
+];
 
 const commentsSlice = createSlice({
   name: 'comments',
   initialState: {comments},
   reducers: {
     getComments(state, action: PayloadAction<CommentType[]>) {
-      state.comments = action.payload.map(item => {
-        console.log(item);
-        return item;
-      });
+      state.comments = action.payload;
       console.log(state.comments);
     },
   },

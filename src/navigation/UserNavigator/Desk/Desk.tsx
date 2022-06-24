@@ -11,7 +11,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {selectColumnsList} from '../../../store/ducks/columnsList/selectors';
 import Board from '../../../UI/Board/Board';
 import {ProfileScreenNavigationProp} from '../Navigator';
-import {sagaActions} from '../../../store/ducks/columnsList/types';
+import {columnsSagaActions} from '../../../store/ducks/columnsList/types';
 import SvgPlus from '../../../assets/icons/Plus';
 import SvgAddMember from '../../../assets/icons/AddMember';
 
@@ -23,7 +23,7 @@ const Desk = ({navigation}: Props) => {
   const columns = useSelector(selectColumnsList);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch({type: sagaActions.FETCH_COLUMNS_SAGA});
+    dispatch({type: columnsSagaActions.FETCH_COLUMNS_SAGA});
   }, []);
 
   return (
