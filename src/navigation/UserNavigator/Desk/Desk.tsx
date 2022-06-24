@@ -8,11 +8,12 @@ import {
   ScrollView,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {selectColumnsList} from '../../../store/columnsList/selectors';
-import Board from '../../../assets/UI/Board/Board';
+import {selectColumnsList} from '../../../store/ducks/columnsList/selectors';
+import Board from '../../../UI/Board/Board';
 import {ProfileScreenNavigationProp} from '../Navigator';
-import {sagaActions} from '../../../store/columnsList/types';
+import {sagaActions} from '../../../store/ducks/columnsList/types';
 import SvgPlus from '../../../assets/icons/Plus';
+import SvgAddMember from '../../../assets/icons/AddMember';
 
 type Props = {
   navigation: ProfileScreenNavigationProp;

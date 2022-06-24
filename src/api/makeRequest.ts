@@ -1,5 +1,5 @@
 import axios, {AxiosInstance} from 'axios';
-import {API_URL} from '../constatns';
+import {enPoint} from '../constatns';
 
 export class MakeRequest {
   constructor(private readonly _axios: AxiosInstance) {}
@@ -42,6 +42,6 @@ export class MakeRequest {
 
 export const makeRequest = new MakeRequest(
   axios.create({
-    baseURL: API_URL,
+    baseURL: enPoint.API_URL,
   }),
 );

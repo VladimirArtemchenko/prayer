@@ -1,30 +1,21 @@
 import React from 'react';
-import {StyleSheet, Text, SafeAreaView, Button, TextInput} from 'react-native';
-import {useForm, Controller} from 'react-hook-form';
+import {StyleSheet, SafeAreaView, TouchableHighlight} from 'react-native';
+import {Controller, useForm} from 'react-hook-form';
 import {useDispatch} from 'react-redux';
-import {sagaActions} from '../../../store/user/types';
-import {ProfileScreenNavigationProp} from '../../GuestNavigator/Navigator';
+import {sagaActions} from '../../../store/ducks/user/types';
+import PrimaryButton from '../../../UI/Button';
+import Input from '../../../UI/Input';
 
-type Props = {
-  navigation: ProfileScreenNavigationProp;
-};
-
-const SignInForm = ({navigation}: Props) => {
-  const {
-    control,
-    handleSubmit,
-    reset,
-    formState: {errors},
-  } = useForm({
+const SignInForm = () => {
+  const dispatch = useDispatch();
+  const {control, handleSubmit, reset} = useForm({
     defaultValues: {
       email: '',
       password: '',
     },
   });
-
-  const dispatch = useDispatch();
   const onSubmit = (data: {email: string; password: string}) => {
-    dispatch({type: sagaActions.FETCH_SIGNIN_SAGA, data, navigation});
+    dispatch({type: sagaActions.FETCH_SIGNIN_SAGA, data});
     reset();
   };
 
@@ -35,39 +26,34 @@ const SignInForm = ({navigation}: Props) => {
         rules={{
           required: true,
         }}
-        render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
-            placeholder="Email"
-            style={styles.input}
-            onBlur={onBlur}
+        render={({field: {onChange, value}, fieldState: {invalid}}) => (
+          <Input
+            placeholder={'Email'}
             onChangeText={onChange}
             value={value}
+            invalid={invalid}
           />
         )}
         name="email"
       />
-      {errors.email && <Text>This is required.</Text>}
       <Controller
         control={control}
         rules={{
           required: true,
         }}
-        render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
-            placeholder="Password"
-            style={styles.input}
-            onBlur={onBlur}
+        render={({field: {onChange, value}, fieldState: {invalid}}) => (
+          <Input
+            placeholder={'Password'}
             onChangeText={onChange}
             value={value}
+            invalid={invalid}
           />
         )}
         name="password"
       />
-      <Button
-        color={'green'}
-        onPress={handleSubmit(onSubmit)}
-        title={'Login'}
-      />
+      <TouchableHighlight onPress={handleSubmit(onSubmit)}>
+        <PrimaryButton size={'home'} title={'Login'} />
+      </TouchableHighlight>
     </SafeAreaView>
   );
 };

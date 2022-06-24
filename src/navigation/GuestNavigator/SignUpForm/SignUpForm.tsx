@@ -1,30 +1,19 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  SafeAreaView,
-  View,
-  TextInput,
-  TouchableHighlight,
-} from 'react-native';
+import {StyleSheet, SafeAreaView, View, TouchableHighlight} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import {useDispatch} from 'react-redux';
-import {sagaActions} from '../../../store/user/types';
-import PrimaryButton from '../../../assets/UI/Button';
-import {ProfileScreenNavigationProp} from '../../GuestNavigator/Navigator';
-import {SIGNIN_ROUTE} from '../routes';
+import {sagaActions} from '../../../store/ducks/user/types';
+import PrimaryButton from '../../../UI/Button';
+import {ProfileScreenNavigationProp} from '../Navigator';
+import {route} from '../routes';
+import Input from '../../../UI/Input';
 
 type Props = {
   navigation: ProfileScreenNavigationProp;
 };
 
 const SignUpForm = ({navigation}: Props) => {
-  const {
-    control,
-    handleSubmit,
-    reset,
-    formState: {errors},
-  } = useForm({
+  const {control, handleSubmit, reset} = useForm({
     defaultValues: {
       email: '',
       name: '',
@@ -44,30 +33,27 @@ const SignUpForm = ({navigation}: Props) => {
         rules={{
           required: true,
         }}
-        render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
+        render={({field: {onChange, value}, fieldState: {invalid}}) => (
+          <Input
             placeholder="Email"
-            style={styles.input}
-            onBlur={onBlur}
             onChangeText={onChange}
             value={value}
+            invalid={invalid}
           />
         )}
         name="email"
       />
-      {errors.email && <Text>This is required.</Text>}
       <Controller
         control={control}
         rules={{
           required: true,
         }}
-        render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
+        render={({field: {onChange, value}, fieldState: {invalid}}) => (
+          <Input
             placeholder="Name"
-            style={styles.input}
-            onBlur={onBlur}
             onChangeText={onChange}
             value={value}
+            invalid={invalid}
           />
         )}
         name="name"
@@ -77,13 +63,12 @@ const SignUpForm = ({navigation}: Props) => {
         rules={{
           required: true,
         }}
-        render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
+        render={({field: {onChange, value}, fieldState: {invalid}}) => (
+          <Input
             placeholder="Password"
-            style={styles.input}
-            onBlur={onBlur}
             onChangeText={onChange}
             value={value}
+            invalid={invalid}
           />
         )}
         name="password"
@@ -92,7 +77,8 @@ const SignUpForm = ({navigation}: Props) => {
         <TouchableHighlight onPress={handleSubmit(onSubmit)}>
           <PrimaryButton title="SIGNUP" size={'home'} />
         </TouchableHighlight>
-        <TouchableHighlight onPress={() => navigation.navigate(SIGNIN_ROUTE)}>
+        <TouchableHighlight
+          onPress={() => navigation.navigate(route.SIGNIN_ROUTE)}>
           <PrimaryButton size={'home'} title="IF REGISTERED" />
         </TouchableHighlight>
       </View>

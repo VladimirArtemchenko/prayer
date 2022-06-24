@@ -4,12 +4,7 @@ import {
   createStackNavigator,
   StackNavigationProp,
 } from '@react-navigation/stack';
-import {
-  ADD_COLUMN_ROUTE,
-  DESK_ROUTE,
-  BOARD_SCREEN_ROUTE,
-  PPAYER_SCREEN_ROUTE,
-} from './routes';
+import {route} from './routes';
 import Desk from './Desk';
 import AddColumnForm from './AddColumnForm';
 import BoardScreen from './BoardScreen';
@@ -30,22 +25,22 @@ const GuestNavigator = () => {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          name={DESK_ROUTE}
+          name={route.DESK_ROUTE}
           component={Desk}
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name={ADD_COLUMN_ROUTE}
+          name={route.ADD_COLUMN_ROUTE}
           component={AddColumnForm}
           options={{headerShown: true}}
         />
         <Stack.Screen
-          name={BOARD_SCREEN_ROUTE}
+          name={route.BOARD_SCREEN_ROUTE}
           component={BoardScreen}
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name={PPAYER_SCREEN_ROUTE}
+          name={route.PPAYER_SCREEN_ROUTE}
           component={PrayerScreen}
           options={{headerShown: false}}
         />

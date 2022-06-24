@@ -4,8 +4,8 @@ import {memo} from 'react';
 
 const SvgAddMember = (props: SvgProps) => (
   <Svg
-    width={32}
-    height={32}
+    width={50}
+    height={50}
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     {...props}>
@@ -18,8 +18,8 @@ const SvgAddMember = (props: SvgProps) => (
       maskUnits="userSpaceOnUse"
       x={8}
       y={8}
-      width={16}
-      height={16}>
+      width={30}
+      height={30}>
       <Path
         d="M15.273 23.273a.727.727 0 1 0 1.454 0v-6.546h6.546a.727.727 0 1 0 0-1.454h-6.546V8.727a.727.727 0 0 0-1.454 0v6.546H8.727a.727.727 0 0 0 0 1.454h6.546v6.546Z"
         fill="#fff"

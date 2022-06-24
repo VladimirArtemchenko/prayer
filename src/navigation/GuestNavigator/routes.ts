@@ -1,2 +1,4 @@
-export const SIGNIN_ROUTE = 'SignInForm';
-export const SIGNUP_ROUTE = 'SignUpForm';
+export enum route {
+  SIGNIN_ROUTE = 'SignInForm',
+  SIGNUP_ROUTE = 'SignUpForm',
+}

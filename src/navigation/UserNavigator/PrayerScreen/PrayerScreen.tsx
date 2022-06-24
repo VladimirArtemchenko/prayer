@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -6,26 +6,32 @@ import {
   TouchableHighlight,
   View,
 } from 'react-native';
-import DetailsItem from '../../../assets/UI/DetailsItem';
+import DetailsItem from '../../../UI/DetailsItem';
 import SvgBack from '../../../assets/icons/Back';
 import SvgPrayer from '../../../assets/icons/Prayer';
 import SvgAddMember from '../../../assets/icons/AddMember';
-// import {useDispatch, useSelector} from 'react-redux';
-// import {selectComments} from '../../../store/comments/selectors';
-// import {selectUserName} from '../../../store/user/selectors';
+import {useDispatch, useSelector} from 'react-redux';
+import {selectComments} from '../../../store/ducks/comments/selectors';
+import {selectUserName} from '../../../store/ducks/user/selectors';
 import {ProfileScreenNavigationProp} from '../Navigator';
-// import {selectCurrentBoardId} from '../../../store/currentBoardId/selectors';
+import {sagaActions} from '../../../store/ducks/comments/types';
+import {selectCurrentBoardId} from '../../../store/ducks/currentBoardId/selectors';
+import Comment from '../../../UI/Comment';
+import {SwipeListView} from 'react-native-swipe-list-view';
+
 interface PrayerScreenProps {
   navigation: ProfileScreenNavigationProp;
 }
 const PrayerScreen: React.FC<PrayerScreenProps> = ({navigation}) => {
-  // const dispatch = useDispatch();
-  // const [isVisibleModal, setIsVisibleModal] = useState(false);
-  // const [commentId, setCommentId] = useState(-1);
-  // const columnId = useSelector(selectCurrentBoardId);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch({type: sagaActions.FETCH_COMMENTS_SAGA});
+  }, []);
+  const columnId = useSelector(selectCurrentBoardId);
+  const comments = useSelector(selectComments);
+  console.log(comments);
+  const userName = useSelector(selectUserName);
 
-  // const comments = useSelector(selectComments);
-  // const userName = useSelector(selectUserName);
   const handleAddMemberClick = () => {
     console.log('click');
   };
@@ -73,17 +79,33 @@ const PrayerScreen: React.FC<PrayerScreenProps> = ({navigation}) => {
             <View style={styles.membersContainer}>
               <Text style={styles.membersTitle}>comments</Text>
             </View>
-            {/*{comments &&*/}
-            {/*  comments.map(item => (*/}
-            {/*    <Comment*/}
-            {/*      key={item.id}*/}
-            {/*      id={item.id}*/}
-            {/*      name={userName}*/}
-            {/*      comment={item.body}*/}
-            {/*      setIsVisibleModal={setIsVisibleModal}*/}
-            {/*      setCommentId={setCommentId}*/}
+            {/*<SwipeListView*/}
+            {/*  data={comments}*/}
+            {/*  extraData={checkedPrayerList}*/}
+            {/*  rightOpenValue={-80}*/}
+            {/*  removeClippedSubviews={false}*/}
+            {/*  disableRightSwipe*/}
+            {/*  useNativeDriver={false}*/}
+            {/*  renderItem={data => (*/}
+            {/*    <Prayer*/}
+            {/*      key={data.item.id}*/}
+            {/*      title={data.item.title}*/}
+            {/*      checked={data.item.checked}*/}
+            {/*      navigation={navigation}*/}
+            {/*      prayer={data.item}*/}
             {/*    />*/}
-            {/*  ))}*/}
+            {/*  )}*/}
+            {/*  renderHiddenItem={renderHiddenItem}*/}
+            {/*/>*/}
+
+            {comments &&
+              comments.map(item => (
+                <Comment
+                  comment={item.body}
+                  name={item.prayerId}
+                  id={item.id}
+                />
+              ))}
           </View>
         </View>
       </View>
@@ -100,7 +122,7 @@ const styles = StyleSheet.create({
   },
   lastPriedText: {
     marginLeft: 7,
-    color: ' #514d47',
+    color: '#514d47',
     fontSize: 20,
   },
   detailsContainer: {

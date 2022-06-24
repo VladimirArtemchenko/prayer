@@ -4,7 +4,7 @@ import {
   createStackNavigator,
   StackNavigationProp,
 } from '@react-navigation/stack';
-import {SIGNIN_ROUTE, SIGNUP_ROUTE} from './routes';
+import {route} from './routes';
 import SignUpForm from './SignUpForm';
 import SignInForm from './SignInForm';
 export type RootStackParamList = {
@@ -21,12 +21,12 @@ const GuestNavigator = () => {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          name={SIGNUP_ROUTE}
+          name={route.SIGNUP_ROUTE}
           component={SignUpForm}
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name={SIGNIN_ROUTE}
+          name={route.SIGNIN_ROUTE}
           component={SignInForm}
           options={{headerShown: true}}
         />

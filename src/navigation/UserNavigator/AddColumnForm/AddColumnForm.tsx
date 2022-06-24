@@ -2,20 +2,19 @@ import React from 'react';
 import {
   StyleSheet,
   SafeAreaView,
-  Button,
   TextInput,
   Text,
-  Image,
   View,
   TouchableHighlight,
 } from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import {useDispatch} from 'react-redux';
-import {sagaActions} from '../../../store/columnsList/types';
+import {sagaActions} from '../../../store/ducks/columnsList/types';
 import {ProfileScreenNavigationProp} from '../Navigator';
-import {DESK_ROUTE} from '../routes';
-import PrimaryButton from '../../../assets/UI/Button';
+import {route} from '../routes';
+import PrimaryButton from '../../../UI/Button';
 import SvgAdd from '../../../assets/icons/Add';
+import Input from '../../../UI/Input';
 
 type Props = {
   navigation: ProfileScreenNavigationProp;
@@ -51,56 +50,42 @@ const AddColumnForm = ({navigation}: Props) => {
       description,
       prayerId,
     });
-    navigation.navigate(DESK_ROUTE);
+    navigation.navigate(route.DESK_ROUTE);
     reset();
   };
 
   return (
     <SafeAreaView style={styles.sectionContainer}>
-      <View style={styles.inputContainer}>
-        <Controller
-          control={control}
-          rules={{
-            required: true,
-          }}
-          render={({field: {onChange, onBlur, value}}) => (
-            <TextInput
-              placeholder="Column title"
-              style={styles.input}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-            />
-          )}
-          name="title"
-        />
-        {errors.title && <Text>This is required.</Text>}
-        <View style={styles.plusButton}>
-          <SvgAdd />
-        </View>
-      </View>
-      <View style={styles.inputContainer}>
-        <Controller
-          control={control}
-          rules={{
-            required: true,
-          }}
-          render={({field: {onChange, onBlur, value}}) => (
-            <TextInput
-              placeholder="Column description"
-              style={styles.input}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-            />
-          )}
-          name="description"
-        />
-        {errors.description && <Text>This is required.</Text>}
-        <View style={styles.plusButton}>
-          <SvgAdd />
-        </View>
-      </View>
+      <Controller
+        control={control}
+        rules={{
+          required: true,
+        }}
+        render={({field: {onChange, value}, fieldState: {invalid}}) => (
+          <Input
+            placeholder="Column title"
+            onChangeText={onChange}
+            value={value}
+            invalid={invalid}
+          />
+        )}
+        name="title"
+      />
+      <Controller
+        control={control}
+        rules={{
+          required: true,
+        }}
+        render={({field: {onChange, value}, fieldState: {invalid}}) => (
+          <Input
+            placeholder="Column description"
+            onChangeText={onChange}
+            value={value}
+            invalid={invalid}
+          />
+        )}
+        name="description"
+      />
       <TouchableHighlight onPress={handleSubmit(onSubmit)}>
         <PrimaryButton size={'small'} title={'Add'} />
       </TouchableHighlight>
