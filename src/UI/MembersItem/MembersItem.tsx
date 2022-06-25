@@ -1,12 +1,12 @@
 import React, {FC} from 'react';
-import {Image, StyleSheet, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 interface MembersItemProps {
   img: string;
 }
 const MembersItem: FC<MembersItemProps> = ({img}) => {
   return (
     <View style={styles.container}>
-      {/*<Image style={styles.image} source={'./'} />*/}
+      <Text>{img}</Text>
     </View>
   );
 };

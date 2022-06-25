@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, SafeAreaView, View, TouchableHighlight} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import {useDispatch} from 'react-redux';
-import {sagaActions} from '../../../store/ducks/user/types';
+import {sagaUserActions} from '../../../store/ducks/user/types';
 import PrimaryButton from '../../../UI/Button';
 import {ProfileScreenNavigationProp} from '../Navigator';
 import {route} from '../routes';
@@ -22,7 +22,7 @@ const SignUpForm = ({navigation}: Props) => {
   });
   const dispatch = useDispatch();
   const onSubmit = (data: {email: string; name: string; password: string}) => {
-    dispatch({type: sagaActions.FETCH_SIGNUP_SAGA, data});
+    dispatch({type: sagaUserActions.FETCH_SIGNUP_SAGA, data});
     reset();
   };
 
@@ -33,12 +33,12 @@ const SignUpForm = ({navigation}: Props) => {
         rules={{
           required: true,
         }}
-        render={({field: {onChange, value}, fieldState: {invalid}}) => (
+        render={({field: {onChange, value}, fieldState: {error}}) => (
           <Input
             placeholder="Email"
             onChangeText={onChange}
             value={value}
-            invalid={invalid}
+            error={error}
           />
         )}
         name="email"
@@ -48,12 +48,12 @@ const SignUpForm = ({navigation}: Props) => {
         rules={{
           required: true,
         }}
-        render={({field: {onChange, value}, fieldState: {invalid}}) => (
+        render={({field: {onChange, value}, fieldState: {error}}) => (
           <Input
             placeholder="Name"
             onChangeText={onChange}
             value={value}
-            invalid={invalid}
+            error={error}
           />
         )}
         name="name"
@@ -63,12 +63,12 @@ const SignUpForm = ({navigation}: Props) => {
         rules={{
           required: true,
         }}
-        render={({field: {onChange, value}, fieldState: {invalid}}) => (
+        render={({field: {onChange, value}, fieldState: {error}}) => (
           <Input
             placeholder="Password"
             onChangeText={onChange}
             value={value}
-            invalid={invalid}
+            error={error}
           />
         )}
         name="password"
@@ -88,6 +88,9 @@ const SignUpForm = ({navigation}: Props) => {
 
 const styles = StyleSheet.create({
   sectionContainer: {
+    backgroundColor: 'white',
+    height: '100%',
+    padding: 15,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',

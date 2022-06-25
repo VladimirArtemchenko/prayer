@@ -15,7 +15,7 @@ const persistConfig = {
 };
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-export const index = configureStore({
+export const store = configureStore({
   reducer: persistedReducer,
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
@@ -25,5 +25,5 @@ export const index = configureStore({
 
 sagaMiddleware.run(rootSagas);
 
-export const persistor = persistStore(index);
-export type RootState = ReturnType<typeof index.getState>;
+export const persistor = persistStore(store);
+export type RootState = ReturnType<typeof store.getState>;

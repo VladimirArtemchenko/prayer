@@ -15,7 +15,7 @@ const prayerListSlice = createSlice({
   initialState: {prayerList},
   reducers: {
     setPrayerList(state, action: PayloadAction<PrayersListType[]>) {
-      state.prayerList = action.payload;
+      return {...state, prayerList: action.payload};
     },
   },
 });

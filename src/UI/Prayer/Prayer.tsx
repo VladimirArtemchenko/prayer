@@ -1,12 +1,5 @@
-import React, {SetStateAction, useState} from 'react';
-import {
-  StyleSheet,
-  Text,
-  SafeAreaView,
-  View,
-  Alert,
-  TouchableHighlight,
-} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, Text, View, TouchableHighlight} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {ProfileScreenNavigationProp} from '../../navigation/UserNavigator/Navigator';
 import {route} from '../../navigation/UserNavigator/routes';
@@ -16,11 +9,11 @@ import SvgState from '../../assets/icons/State';
 import SvgOff from '../../assets/icons/Off';
 import SvgOn from '../../assets/icons/On';
 import {PrayersListType} from '../../store/ducks/prayerList/reducer';
-import {sagaActions} from '../../store/ducks/prayerList/types';
-import Input from '../Input';
+import {sagaPrayerActions} from '../../store/ducks/prayerList/types';
 import {useForm, Controller} from 'react-hook-form';
 import SvgAdd from '../../assets/icons/Add';
 import EditInput from '../EditInput';
+import {setCurrentPrayerId} from '../../store/ducks/currentPrayerId/reducer';
 interface PrayerProps {
   title: string;
   navigation: ProfileScreenNavigationProp;
@@ -43,7 +36,7 @@ const Prayer: React.FC<PrayerProps> = ({
   function getRandomInt(max: number) {
     return Math.floor(Math.random() * max);
   }
-  const [userCount, setUserCount] = useState(getRandomInt(50));
+  const userCount = getRandomInt(50);
   const [isEditMode, setIsEditMode] = useState(false);
   const [prayerCount, setPrayerCount] = useState(getRandomInt(50));
   const onSubmit = (data: {title: string}) => {
@@ -55,7 +48,7 @@ const Prayer: React.FC<PrayerProps> = ({
       columnId: prayer.columnId,
     };
     dispatch({
-      type: sagaActions.CHANGE_PRAYERS_SAGA,
+      type: sagaPrayerActions.CHANGE_PRAYERS_SAGA,
       data: body,
       prayerId: prayer.id,
     });
@@ -67,6 +60,7 @@ const Prayer: React.FC<PrayerProps> = ({
   };
 
   const handleClick = () => {
+    dispatch(setCurrentPrayerId(prayer.id));
     navigation.navigate(route.PPAYER_SCREEN_ROUTE);
   };
   const handleCheckboxClick = () => {
@@ -77,7 +71,7 @@ const Prayer: React.FC<PrayerProps> = ({
       columnId: prayer.columnId,
     };
     dispatch({
-      type: sagaActions.CHANGE_PRAYERS_SAGA,
+      type: sagaPrayerActions.CHANGE_PRAYERS_SAGA,
       data,
       prayerId: prayer.id,
     });
@@ -85,64 +79,56 @@ const Prayer: React.FC<PrayerProps> = ({
   const handleChangeClick = () => {
     setIsEditMode(true);
   };
-
   return (
-    <SafeAreaView style={styles.prayer}>
-      <View style={styles.prayerContainer}>
-        <View style={styles.border}>
-          <SvgState />
-        </View>
-        <TouchableHighlight onPress={handleCheckboxClick}>
-          <View style={styles.checkboxIcon}>
-            {checked ? <SvgOn /> : <SvgOff />}
-          </View>
-        </TouchableHighlight>
-        <TouchableHighlight
-          onPress={handleClick}
-          onLongPress={handleChangeClick}>
-          {isEditMode ? (
-            <View>
-              <Controller
-                control={control}
-                rules={{
-                  required: true,
-                }}
-                render={({field: {onChange, value}, fieldState: {invalid}}) => (
-                  <EditInput
-                    placeholder={'Title'}
-                    onChangeText={onChange}
-                    value={value}
-                    invalid={invalid}
-                  />
-                )}
-                name="title"
-              />
-              <TouchableHighlight
-                style={styles.plusButton}
-                onPress={handleSubmit(onSubmit)}>
-                <SvgAdd />
-              </TouchableHighlight>
-            </View>
-          ) : (
-            <Text style={styles.prayerTitle}>{title}</Text>
-          )}
-        </TouchableHighlight>
-        <View style={styles.iconContainer}>
-          <TouchableHighlight
-            onPress={() => handleIncrease(setUserCount, userCount)}>
-            <SvgUser />
-          </TouchableHighlight>
-          <Text style={styles.count}>{userCount}</Text>
-        </View>
-        <View style={styles.iconContainer}>
-          <TouchableHighlight
-            onPress={() => handleIncrease(setPrayerCount, prayerCount)}>
-            <SvgPrayer fill={'#72A8BC'} />
-          </TouchableHighlight>
-          <Text style={styles.count}>{prayerCount}</Text>
-        </View>
+    <View style={styles.prayer}>
+      <View style={styles.border}>
+        <SvgState />
       </View>
-    </SafeAreaView>
+      <TouchableHighlight onPress={handleCheckboxClick}>
+        <View style={styles.checkboxIcon}>
+          {checked ? <SvgOn /> : <SvgOff />}
+        </View>
+      </TouchableHighlight>
+      <TouchableHighlight onPress={handleClick} onLongPress={handleChangeClick}>
+        {isEditMode ? (
+          <View style={styles.inputContainer}>
+            <Controller
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({field: {onChange, value}, fieldState: {error}}) => (
+                <EditInput
+                  placeholder={'Title'}
+                  onChangeText={onChange}
+                  value={value}
+                  error={error}
+                />
+              )}
+              name="title"
+            />
+            <TouchableHighlight
+              style={styles.plusButton}
+              onPress={handleSubmit(onSubmit)}>
+              <SvgAdd />
+            </TouchableHighlight>
+          </View>
+        ) : (
+          <Text style={styles.prayerTitle}>{title}</Text>
+        )}
+      </TouchableHighlight>
+      <View style={styles.iconContainer}>
+        <SvgUser />
+        <Text style={styles.count}>{userCount}</Text>
+      </View>
+      <View style={styles.iconContainer}>
+        <TouchableHighlight
+          onPress={() => handleIncrease(setPrayerCount, prayerCount)}>
+          <SvgPrayer fill={'#72A8BC'} />
+        </TouchableHighlight>
+        <Text style={styles.count}>{prayerCount}</Text>
+      </View>
+    </View>
   );
 };
 
@@ -150,16 +136,23 @@ const styles = StyleSheet.create({
   prayer: {
     backgroundColor: 'white',
     display: 'flex',
-    paddingTop: 23,
-    paddingBottom: 23,
     width: '100%',
     height: 68,
     justifyContent: 'center',
+    paddingLeft: 15,
+    paddingRight: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   border: {
     width: 3,
     height: 22,
     marginRight: 15,
+  },
+  inputContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   checkboxIcon: {
     width: 22,
@@ -198,15 +191,6 @@ const styles = StyleSheet.create({
     lineHeight: 14,
     letterSpacing: -0.024,
     marginLeft: 5,
-  },
-  prayerContainer: {
-    width: '100%',
-    paddingLeft: 15,
-    paddingRight: 15,
-    display: 'flex',
-    flexDirection: 'row',
-    // justifyContent: 'center',
-    // alignItems: 'center',
   },
 });
 

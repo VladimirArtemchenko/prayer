@@ -4,6 +4,7 @@ import prayerList from './prayerList';
 import userInfo from './user';
 import currentBoardId from './currentBoardId';
 import comments from './comments';
+import currentPrayerId from './currentPrayerId';
 import {all} from 'redux-saga/effects';
 import {fetchSignUpSagaWatcher} from './user/sagas';
 import {fetchSignInSagaWatcher} from './user/sagas';
@@ -30,6 +31,7 @@ export const rootReducer = combineReducers({
   columnsList,
   userInfo,
   currentBoardId,
+  currentPrayerId,
   prayerList,
   comments,
 });

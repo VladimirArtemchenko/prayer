@@ -1,19 +1,11 @@
 import React from 'react';
-import {
-  StyleSheet,
-  SafeAreaView,
-  TextInput,
-  Text,
-  View,
-  TouchableHighlight,
-} from 'react-native';
+import {StyleSheet, SafeAreaView, TouchableHighlight} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import {useDispatch} from 'react-redux';
 import {columnsSagaActions} from '../../../store/ducks/columnsList/types';
 import {ProfileScreenNavigationProp} from '../Navigator';
 import {route} from '../routes';
 import PrimaryButton from '../../../UI/Button';
-import SvgAdd from '../../../assets/icons/Add';
 import Input from '../../../UI/Input';
 
 type Props = {
@@ -21,12 +13,7 @@ type Props = {
 };
 
 const AddColumnForm = ({navigation}: Props) => {
-  const {
-    control,
-    handleSubmit,
-    reset,
-    formState: {errors},
-  } = useForm({
+  const {control, handleSubmit, reset} = useForm({
     defaultValues: {
       title: '',
       description: '',
@@ -61,12 +48,12 @@ const AddColumnForm = ({navigation}: Props) => {
         rules={{
           required: true,
         }}
-        render={({field: {onChange, value}, fieldState: {invalid}}) => (
+        render={({field: {onChange, value}, fieldState: {error}}) => (
           <Input
             placeholder="Column title"
             onChangeText={onChange}
             value={value}
-            invalid={invalid}
+            error={error}
           />
         )}
         name="title"
@@ -76,12 +63,12 @@ const AddColumnForm = ({navigation}: Props) => {
         rules={{
           required: true,
         }}
-        render={({field: {onChange, value}, fieldState: {invalid}}) => (
+        render={({field: {onChange, value}, fieldState: {error}}) => (
           <Input
             placeholder="Column description"
             onChangeText={onChange}
             value={value}
-            invalid={invalid}
+            error={error}
           />
         )}
         name="description"
@@ -95,6 +82,9 @@ const AddColumnForm = ({navigation}: Props) => {
 
 const styles = StyleSheet.create({
   sectionContainer: {
+    backgroundColor: 'white',
+    height: '100%',
+    padding: 15,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',

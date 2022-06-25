@@ -10,7 +10,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {selectUserToken} from '../../store/ducks/user/selectors';
 import {setCurrentBoardId} from '../../store/ducks/currentBoardId/reducer';
 import {ProfileScreenNavigationProp} from '../../navigation/UserNavigator/Navigator';
-import {route} from '../../navigation/UserNavigator/routes';
+import {route} from '../../navigation/routes';
 
 interface BoardProps {
   title: string;

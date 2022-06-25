@@ -1,9 +1,7 @@
 import React, {useMemo, useState} from 'react';
 import {
   StyleSheet,
-  Text,
   SafeAreaView,
-  View,
   TouchableHighlight,
   ScrollView,
   TouchableOpacity,
@@ -15,55 +13,22 @@ import {selectPrayerList} from '../../../store/ducks/prayerList/selectors';
 import {selectCurrentBoardId} from '../../../store/ducks/currentBoardId/selectors';
 import AddPrayerForm from '../../../UI/AddPrayerForm/AddPrayerForm';
 import {ProfileScreenNavigationProp} from '../Navigator';
-import {selectColumnsList} from '../../../store/ducks/columnsList/selectors';
 import Prayer from '../../../UI/Prayer/Prayer';
-import SvgSettings from '../../../assets/icons/Settings';
-import {makeRequest} from '../../../api/makeRequest';
-import {getUserInfo} from '../../../store/ducks/user/reducer';
-import {columnsSagaActions} from '../../../store/ducks/columnsList/types';
-import {sagaActions} from '../../../store/ducks/prayerList/types';
+import {sagaPrayerActions} from '../../../store/ducks/prayerList/types';
 import {RowMap, SwipeListView} from 'react-native-swipe-list-view';
 import PrimaryButton from '../../../UI/Button';
 import {PrayersListType} from '../../../store/ducks/prayerList/reducer';
-import {Controller, useForm} from 'react-hook-form';
-import SvgAdd from '../../../assets/icons/Add';
-import Input from '../../../UI/Input';
 
 interface BoardScreenProps {
   navigation: ProfileScreenNavigationProp;
+  setIsActive: (value: boolean) => void;
 }
 
-const BoardScreen: React.FC<BoardScreenProps> = ({navigation}) => {
+const MyPrayers: React.FC<BoardScreenProps> = ({navigation}) => {
   const dispatch = useDispatch();
   const prayerList = useSelector(selectPrayerList);
-  const columnsList = useSelector(selectColumnsList);
   const currentBoardId = useSelector(selectCurrentBoardId);
-  const [isEditMode, setIsEditMode] = useState(false);
   const [isShowed, setIsShowed] = useState(false);
-  const currentBoard = useMemo(
-    () => columnsList.find(column => column.id === currentBoardId),
-    [columnsList, currentBoardId],
-  );
-  const {control, handleSubmit, reset} = useForm({
-    defaultValues: {
-      title: currentBoard ? currentBoard.title : '',
-    },
-  });
-  const onSubmit = (data: {title: string}) => {
-    setIsEditMode(false);
-    const body = {
-      title: data.title,
-      description: currentBoard.description,
-      prayerId: currentBoard.id,
-    };
-    console.log(body);
-    dispatch({
-      type: columnsSagaActions.CHANGE_COLUMN_SAGA,
-      data: body,
-      columnId: currentBoard.id,
-    });
-    reset();
-  };
   const currentPrayerList = useMemo(
     () =>
       prayerList.filter(
@@ -99,7 +64,7 @@ const BoardScreen: React.FC<BoardScreenProps> = ({navigation}) => {
       {
         text: 'OK',
         onPress: () =>
-          dispatch({type: sagaActions.DELETE_PRAYERS_SAGA, prayerId}),
+          dispatch({type: sagaPrayerActions.DELETE_PRAYERS_SAGA, prayerId}),
       },
     ]);
   };
@@ -116,82 +81,12 @@ const BoardScreen: React.FC<BoardScreenProps> = ({navigation}) => {
     );
   };
 
-  const handleLogout = () => {
-    makeRequest.unsetAuthorizationHeader();
-    dispatch(
-      getUserInfo({
-        email: '',
-        id: 0,
-        name: '',
-        token: '',
-      }),
-    );
-  };
-
-  const handleChangeClick = () => {
-    setIsEditMode(true);
-  };
   return (
     <SafeAreaView style={styles.board}>
-      <View style={styles.header}>
-        {isEditMode ? (
-          <View>
-            <Controller
-              control={control}
-              rules={{
-                required: true,
-              }}
-              render={({field: {onChange, value}, fieldState: {invalid}}) => (
-                <Input
-                  placeholder={'Title'}
-                  onChangeText={onChange}
-                  value={value}
-                  invalid={invalid}
-                />
-              )}
-              name="title"
-            />
-            <TouchableHighlight
-              style={styles.plusButton}
-              onPress={handleSubmit(onSubmit)}>
-              <SvgAdd />
-            </TouchableHighlight>
-          </View>
-        ) : (
-          <TouchableHighlight onPress={handleChangeClick}>
-            <Text style={styles.title}>
-              {currentBoard && currentBoard.title}
-            </Text>
-          </TouchableHighlight>
-        )}
-        <TouchableHighlight onPress={handleLogout} style={styles.settings}>
-          <SvgSettings />
-        </TouchableHighlight>
-        <View style={styles.menuContainer}>
-          <TouchableHighlight
-            style={true ? styles.menuItemActive : styles.menuItem}>
-            <Text
-              style={true ? styles.menuItemTextActive : styles.menuItemText}>
-              {'My prayers'.toUpperCase()}
-            </Text>
-          </TouchableHighlight>
-          <TouchableHighlight
-            style={false ? styles.menuItemActive : styles.menuItem}>
-            <Text
-              style={false ? styles.menuItemTextActive : styles.menuItemText}>
-              {'subscribed'.toUpperCase()}
-            </Text>
-          </TouchableHighlight>
-        </View>
-      </View>
-      <View>
-        <AddPrayerForm
-          navigation={navigation}
-          currentBoardId={currentBoardId}
-        />
-      </View>
+      <AddPrayerForm navigation={navigation} currentBoardId={currentBoardId} />
       <ScrollView>
         <SwipeListView
+          scrollEnabled={false}
           data={currentPrayerList}
           extraData={currentPrayerList}
           rightOpenValue={-80}
@@ -209,7 +104,6 @@ const BoardScreen: React.FC<BoardScreenProps> = ({navigation}) => {
           )}
           renderHiddenItem={renderHiddenItem}
         />
-
         {isShowed ? (
           <TouchableHighlight style={styles.smallButton} onPress={toggleHidden}>
             <PrimaryButton size={'small'} title={'Hide Answered Prayers'} />
@@ -221,6 +115,7 @@ const BoardScreen: React.FC<BoardScreenProps> = ({navigation}) => {
         )}
         {isShowed && (
           <SwipeListView
+            scrollEnabled={false}
             data={checkedPrayerList}
             extraData={checkedPrayerList}
             rightOpenValue={-80}
@@ -344,4 +239,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BoardScreen;
+export default MyPrayers;

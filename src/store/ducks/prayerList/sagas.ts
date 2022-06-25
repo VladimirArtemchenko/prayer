@@ -1,12 +1,12 @@
 import {call, put, takeEvery} from 'redux-saga/effects';
 import {enPoint} from '../../../constatns';
-import {sagaActions} from './types';
+import {sagaPrayerActions} from './types';
 import {makeRequest} from '../../../api/makeRequest';
 import {PrayersListType, setPrayerList} from './reducer';
 import {SagaIterator} from 'redux-saga';
 
 export function* fetchPrayerSagaWatcher() {
-  yield takeEvery(sagaActions.FETCH_PRAYERS_SAGA, fetchPrayerListSaga);
+  yield takeEvery(sagaPrayerActions.FETCH_PRAYERS_SAGA, fetchPrayerListSaga);
 }
 
 export function* fetchPrayerListSaga(): SagaIterator {
@@ -18,11 +18,10 @@ export function* fetchPrayerListSaga(): SagaIterator {
   }
 }
 export function* addPrayerSagaWatcher() {
-  yield takeEvery(sagaActions.SET_PRAYERS_SAGA, addPrayerSaga);
+  yield takeEvery(sagaPrayerActions.SET_PRAYERS_SAGA, addPrayerSaga);
 }
 
 export function* addPrayerSaga({
-  type,
   title,
   description,
   checked,
@@ -45,12 +44,11 @@ export function* addPrayerSaga({
 }
 
 export function* deletingPrayerSagaWatcher() {
-  yield takeEvery(sagaActions.DELETE_PRAYERS_SAGA, deletingPrayerSaga);
+  yield takeEvery(sagaPrayerActions.DELETE_PRAYERS_SAGA, deletingPrayerSaga);
 }
 
 export function* deletingPrayerSaga({
   prayerId,
-  type,
 }: {
   prayerId: number;
   type: string;
@@ -65,11 +63,10 @@ export function* deletingPrayerSaga({
 }
 
 export function* changePrayerSagaWatcher() {
-  yield takeEvery(sagaActions.CHANGE_PRAYERS_SAGA, changePrayerSaga);
+  yield takeEvery(sagaPrayerActions.CHANGE_PRAYERS_SAGA, changePrayerSaga);
 }
 
 export function* changePrayerSaga({
-  type,
   data,
   prayerId,
 }: {
@@ -81,7 +78,6 @@ export function* changePrayerSaga({
     yield call(() =>
       makeRequest.put(`${enPoint.PRAYERS_URL}/${prayerId}`, data),
     );
-
     const prayers = yield call(() => makeRequest.get(enPoint.PRAYERS_URL));
     yield put(setPrayerList(prayers.data));
   } catch (error) {

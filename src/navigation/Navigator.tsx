@@ -6,7 +6,6 @@ import {selectUserToken} from '../store/ducks/user/selectors';
 
 const StackApp = () => {
   const isLogin = useSelector(selectUserToken);
-  console.log(isLogin);
   return isLogin ? <UserNavigator /> : <GuestNavigator />;
 };
 

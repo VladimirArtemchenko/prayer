@@ -1,17 +1,20 @@
 import {call, put, takeEvery} from 'redux-saga/effects';
 import {enPoint} from '../../../constatns';
-import {sagaActions} from './types';
+import {sagaCommentActions} from './types';
 import {makeRequest} from '../../../api/makeRequest';
-import {getComments} from './reducer';
+import {CommentType, getComments} from './reducer';
 import {SagaIterator} from 'redux-saga';
+import {AxiosResponse} from 'axios';
 
 export function* fetchCommentsSagaWatcher() {
-  yield takeEvery(sagaActions.FETCH_COMMENTS_SAGA, fetchCommentsSaga);
+  yield takeEvery(sagaCommentActions.FETCH_COMMENTS_SAGA, fetchCommentsSaga);
 }
 
-export function* fetchCommentsSaga(): SagaIterator {
+export function* fetchCommentsSaga() {
   try {
-    const response = yield call(() => makeRequest.get(enPoint.COMMENTS_URL));
+    const response: AxiosResponse<CommentType[]> = yield call(() =>
+      makeRequest.get(enPoint.COMMENTS_URL),
+    );
     yield put(getComments(response.data));
   } catch (error) {
     console.log('error: ', error);
@@ -19,54 +22,63 @@ export function* fetchCommentsSaga(): SagaIterator {
 }
 
 export function* addCommentsSagaWatcher() {
-  yield takeEvery(sagaActions.SET_COMMENTS_SAGA, addCommentsSaga);
+  yield takeEvery(sagaCommentActions.SET_COMMENTS_SAGA, addCommentsSaga);
 }
 
-export function* addCommentsSaga(data: string): SagaIterator {
+export function* addCommentsSaga({
+  body,
+  created,
+  prayerId,
+}: {
+  body: string;
+  created: string;
+  prayerId: number;
+  type: string;
+}): SagaIterator {
   try {
-    const response = yield call(() =>
-      makeRequest.post(enPoint.COMMENTS_URL, data),
-    );
+    const data = {body: body, created: created, prayerId: prayerId};
+    console.log(data);
+    const res = yield call(() => makeRequest.post(enPoint.COMMENTS_URL, data));
+    console.log(res);
     const comments = yield call(() => makeRequest.get(enPoint.COMMENTS_URL));
-    yield put(comments.data);
+    yield put(getComments(comments.data));
   } catch (error) {
     console.log('error: ', error);
   }
 }
 
 export function* deleteCommentsSagaWatcher() {
-  yield takeEvery(sagaActions.DELETE_COMMENTS_SAGA, deleteCommentsSaga);
+  yield takeEvery(sagaCommentActions.DELETE_COMMENTS_SAGA, deleteCommentsSaga);
 }
 
-export function* deleteCommentsSaga(commentId: string): SagaIterator {
+export function* deleteCommentsSaga(data: {
+  id: string;
+  type: string;
+}): SagaIterator {
   try {
-    const response = yield call(() =>
-      makeRequest.delete(`${enPoint.COMMENTS_URL}/${commentId}`),
-    );
-    console.log(response);
+    yield call(() => makeRequest.delete(`${enPoint.COMMENTS_URL}/${data.id}`));
     const comments = yield call(() => makeRequest.get(enPoint.COMMENTS_URL));
-    console.log(comments);
-    yield put(comments.data);
+    yield put(getComments(comments.data));
   } catch (error) {
     console.log('error', error);
   }
 }
 
 export function* changeCommentsSagaWatcher() {
-  yield takeEvery(sagaActions.CHANGE_COMMENTS_SAGA, fetchChangeComment);
+  yield takeEvery(sagaCommentActions.CHANGE_COMMENTS_SAGA, fetchChangeComment);
 }
 
-export function* fetchChangeComment({
-  commentId,
-  body,
-}: {
-  commentId: string;
+export function* fetchChangeComment(body: {
   body: string;
+  prayerId: number;
+  created: string;
+  id: number;
+  type: string;
 }): SagaIterator {
-  const data = {commentId, body};
   try {
+    console.log(body);
     const response = yield call(() =>
-      makeRequest.put(`${enPoint.COMMENTS_URL}/${commentId}`, data),
+      makeRequest.put(`${enPoint.COMMENTS_URL}/${body.id}`, body.body),
     );
     console.log(response);
     const comments = yield call(() => makeRequest.get(enPoint.COMMENTS_URL));

@@ -8,7 +8,7 @@ export type SignUpData = {
   name: string;
   password: string;
 };
-export const sagaActions = {
+export const sagaUserActions = {
   FETCH_SIGNUP_SAGA: 'FETCH_SIGNUP_SAGA',
   FETCH_SIGNIN_SAGA: 'FETCH_SIGNIN_SAGA',
 };

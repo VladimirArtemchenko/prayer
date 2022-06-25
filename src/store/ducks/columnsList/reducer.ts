@@ -14,7 +14,7 @@ const columnsListSlice = createSlice({
   initialState: {columnsList},
   reducers: {
     getColumnsList(state, action: PayloadAction<ColumnListType[]>) {
-      state.columnsList = action.payload;
+      return {...state, columnsList: action.payload};
     },
   },
 });

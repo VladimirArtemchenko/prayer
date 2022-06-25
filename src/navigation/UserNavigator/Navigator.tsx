@@ -7,12 +7,12 @@ import {
 import {route} from './routes';
 import Desk from './Desk';
 import AddColumnForm from './AddColumnForm';
-import BoardScreen from './BoardScreen';
 import PrayerScreen from './PrayerScreen';
+import MyTab from './MyTab';
 export type RootStackParamList = {
   Desk: undefined;
   AddColumnForm: undefined;
-  BoardScreen: undefined;
+  MyTab: undefined;
   PrayerScreen: undefined;
 };
 export type ProfileScreenNavigationProp =
@@ -36,7 +36,7 @@ const GuestNavigator = () => {
         />
         <Stack.Screen
           name={route.BOARD_SCREEN_ROUTE}
-          component={BoardScreen}
+          component={MyTab}
           options={{headerShown: false}}
         />
         <Stack.Screen

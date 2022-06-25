@@ -4,7 +4,6 @@ import {columnsSagaActions} from './types';
 import {makeRequest} from '../../../api/makeRequest';
 import {ColumnListType, getColumnsList} from './reducer';
 import {SagaIterator} from 'redux-saga';
-import {PrayersListType} from '../prayerList/reducer';
 
 export function* fetchColumnsListSagaWatcher() {
   yield takeEvery(columnsSagaActions.FETCH_COLUMNS_SAGA, fetchColumnsListSaga);
@@ -24,7 +23,6 @@ export function* addColumnSagaWatcher() {
 }
 
 export function* addColumnSaga({
-  type,
   title,
   description,
   prayerId,
@@ -50,7 +48,6 @@ export function* deletingColumnSagaWatcher() {
 
 export function* deletingColumnSaga({
   currentId,
-  type,
 }: {
   currentId: number;
   type: string;
@@ -68,7 +65,6 @@ export function* changeColumnSagaWatcher() {
 }
 
 export function* changeColumnsSaga({
-  type,
   data,
   columnId,
 }: {
@@ -77,11 +73,9 @@ export function* changeColumnsSaga({
   columnId: number;
 }): SagaIterator {
   try {
-    console.log(columnId);
-    const response = yield call(() =>
+    yield call(() =>
       makeRequest.put(`${enPoint.COLUMNS_URL}/${columnId}`, data),
     );
-    console.log(response);
     const columns = yield call(() => makeRequest.get(enPoint.COLUMNS_URL));
     yield put(getColumnsList(columns.data));
   } catch (error) {

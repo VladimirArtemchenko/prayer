@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -13,22 +13,35 @@ import SvgAddMember from '../../../assets/icons/AddMember';
 import {useDispatch, useSelector} from 'react-redux';
 import {selectComments} from '../../../store/ducks/comments/selectors';
 import {ProfileScreenNavigationProp} from '../Navigator';
-import {sagaActions} from '../../../store/ducks/comments/types';
+import {sagaCommentActions} from '../../../store/ducks/comments/types';
 import Comment from '../../../UI/Comment';
+import AddCommentForm from '../../../UI/AddCommentForm';
+import {selectCurrentPrayerId} from '../../../store/ducks/currentPrayerId/selectors';
 
 interface PrayerScreenProps {
   navigation: ProfileScreenNavigationProp;
 }
+
 const PrayerScreen: React.FC<PrayerScreenProps> = ({navigation}) => {
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch({type: sagaActions.FETCH_COMMENTS_SAGA});
-  }, []);
   const comments = useSelector(selectComments);
+  const currentPrayerId = useSelector(selectCurrentPrayerId);
+  useEffect(() => {
+    dispatch({type: sagaCommentActions.FETCH_COMMENTS_SAGA});
+  });
 
-  const handleAddMemberClick = () => {
-    console.log('click');
+  const handleDate = () => {
+    const date = Date.now();
+    const newDate = new Date(date);
+    const string = newDate.toDateString();
+    const month = string.slice(4, 8);
+    return ` ${month} ${newDate.getDate()}  ${newDate.getFullYear()}`;
   };
+
+  const currentComments = useMemo(
+    () => comments.filter(comment => comment.prayerId === currentPrayerId),
+    [comments, currentPrayerId],
+  );
   return (
     <ScrollView>
       <View style={styles.headerContainer}>
@@ -54,18 +67,16 @@ const PrayerScreen: React.FC<PrayerScreenProps> = ({navigation}) => {
             <Text style={styles.lastPriedText}>Last prayed 8 min ago</Text>
           </View>
           <View style={styles.detailsContainer}>
-            <DetailsItem title="July 25 2017" info="Date Added" />
+            <DetailsItem title={handleDate()} info="Date Added" />
             <DetailsItem title="123" info="Times Prayed Total" />
           </View>
           <View style={styles.detailsContainer}>
-            <DetailsItem title="July 25 2017" info="Date Added" />
+            <DetailsItem title={handleDate()} info="Date Added" />
             <DetailsItem title="123" info="Times Prayed Total" />
           </View>
           <View style={styles.membersContainer}>
             <Text style={styles.membersTitle}>members</Text>
-            <TouchableHighlight
-              onPress={handleAddMemberClick}
-              style={styles.membersAvatarsContainer}>
+            <TouchableHighlight style={styles.membersAvatarsContainer}>
               <SvgAddMember />
             </TouchableHighlight>
           </View>
@@ -73,14 +84,16 @@ const PrayerScreen: React.FC<PrayerScreenProps> = ({navigation}) => {
             <View style={styles.membersContainer}>
               <Text style={styles.membersTitle}>comments</Text>
             </View>
-            {comments &&
-              comments.map(item => (
+            {currentComments &&
+              currentComments.map(item => (
                 <Comment
                   comment={item.body}
-                  name={item.prayerId}
+                  name={item.userId}
                   id={item.id}
+                  created={item.created}
                 />
               ))}
+            <AddCommentForm />
           </View>
         </View>
       </View>

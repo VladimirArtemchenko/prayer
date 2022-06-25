@@ -19,11 +19,14 @@ const userInfoSlice = createSlice({
   initialState: {userInfo},
   reducers: {
     getUserInfo(state, action: PayloadAction<UserInfoType>) {
-      state.userInfo = {
-        email: action.payload.email,
-        id: action.payload.id,
-        name: action.payload.name,
-        token: action.payload.token,
+      return {
+        ...state,
+        userInfo: {
+          email: action.payload.email,
+          id: action.payload.id,
+          name: action.payload.name,
+          token: action.payload.token,
+        },
       };
     },
   },

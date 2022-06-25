@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, SafeAreaView, TouchableHighlight} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import {useDispatch} from 'react-redux';
-import {sagaActions} from '../../store/ducks/prayerList/types';
+import {sagaPrayerActions} from '../../store/ducks/prayerList/types';
 import {ProfileScreenNavigationProp} from '../../navigation/UserNavigator/Navigator';
 import SvgAdd from '../../assets/icons/Add';
 import Input from '../Input';
@@ -21,7 +21,7 @@ const AddPrayerForm = ({currentBoardId}: Props) => {
   const dispatch = useDispatch();
   const onSubmit = ({title}: {title: string}) => {
     dispatch({
-      type: sagaActions.SET_PRAYERS_SAGA,
+      type: sagaPrayerActions.SET_PRAYERS_SAGA,
       title,
       description: '',
       checked: false,
@@ -37,12 +37,12 @@ const AddPrayerForm = ({currentBoardId}: Props) => {
         rules={{
           required: true,
         }}
-        render={({field: {onChange, value}, fieldState: {invalid}}) => (
+        render={({field: {onChange, value}, fieldState: {error}}) => (
           <Input
             placeholder="Add a prayer..."
             onChangeText={onChange}
             value={value}
-            invalid={invalid}
+            error={error}
           />
         )}
         name="title"
@@ -74,15 +74,14 @@ const styles = StyleSheet.create({
     paddingLeft: 76,
     width: '100%',
     height: 50,
-    margin: 10,
     borderColor: '#E5E5E5',
     borderWidth: 1,
     borderRadius: 10,
   },
   plusButton: {
     position: 'absolute',
-    top: 40,
-    left: 43,
+    top: 30,
+    left: 35,
     width: 24,
     height: 24,
   },

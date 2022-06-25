@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, SafeAreaView, TouchableHighlight} from 'react-native';
 import {Controller, useForm} from 'react-hook-form';
 import {useDispatch} from 'react-redux';
-import {sagaActions} from '../../../store/ducks/user/types';
+import {sagaUserActions} from '../../../store/ducks/user/types';
 import PrimaryButton from '../../../UI/Button';
 import Input from '../../../UI/Input';
 
@@ -15,7 +15,7 @@ const SignInForm = () => {
     },
   });
   const onSubmit = (data: {email: string; password: string}) => {
-    dispatch({type: sagaActions.FETCH_SIGNIN_SAGA, data});
+    dispatch({type: sagaUserActions.FETCH_SIGNIN_SAGA, data});
     reset();
   };
 
@@ -26,12 +26,12 @@ const SignInForm = () => {
         rules={{
           required: true,
         }}
-        render={({field: {onChange, value}, fieldState: {invalid}}) => (
+        render={({field: {onChange, value}, fieldState: {error}}) => (
           <Input
             placeholder={'Email'}
             onChangeText={onChange}
             value={value}
-            invalid={invalid}
+            error={error}
           />
         )}
         name="email"
@@ -41,12 +41,12 @@ const SignInForm = () => {
         rules={{
           required: true,
         }}
-        render={({field: {onChange, value}, fieldState: {invalid}}) => (
+        render={({field: {onChange, value}, fieldState: {error}}) => (
           <Input
             placeholder={'Password'}
             onChangeText={onChange}
             value={value}
-            invalid={invalid}
+            error={error}
           />
         )}
         name="password"
@@ -60,6 +60,9 @@ const SignInForm = () => {
 
 const styles = StyleSheet.create({
   sectionContainer: {
+    backgroundColor: 'white',
+    height: '100%',
+    padding: 15,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
